@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="General">
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/sortings"
+            android:entryValues="@array/sorting_values"
+            android:key="defaultSort"
+            android:summary="@string/default_sort"
+            android:title="@string/default_title" />
+
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/display_time"
+            android:entryValues="@array/sorting_values"
+            android:key="timeOptions"
+            android:summary="@string/display_type"
+            android:title="@string/display_format" />
+
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="Security">
+        <EditTextPreference
+            android:key="password"
+            android:title="@string/set_password"
+            android:summary="@string/password_summary" />
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:title="@string/hide_lock"
+            android:key="hideLocked"
+            android:summary="@string/hide_details" />
+    </PreferenceCategory>
+
+</PreferenceScreen>
