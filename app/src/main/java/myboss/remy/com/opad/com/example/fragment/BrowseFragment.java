@@ -1,6 +1,7 @@
 package myboss.remy.com.opad.com.example.fragment;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -26,6 +27,7 @@ import java.util.List;
 
 import myboss.remy.com.opad.R;
 import myboss.remy.com.opad.com.example.database.MyContentProvider;
+import myboss.remy.com.opad.com.example.database.Note;
 
 /**
  * Created by Chimere on 9/20/2016.
@@ -106,5 +108,15 @@ public class BrowseFragment extends Fragment  {
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
     }*/
+
+    public static void openNote(long id, Context context) {
+        Note note = new Note(id);
+        note.load(MyContentProvider.CONTENT_URI_NOTE);
+
+        String type = note.getType();
+        if (Note.GENERAL.equals(type)) {
+
+        }
+    }
 
 }
