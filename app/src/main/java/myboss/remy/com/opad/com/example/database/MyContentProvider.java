@@ -5,11 +5,13 @@ import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.Log;
 
 /**
  * Created by Chimere on 9/18/2016.
@@ -18,16 +20,16 @@ public class MyContentProvider extends ContentProvider {
     public static final String AUTHORITY = "com.example.database.MyContentProvider";
 
     //tables
-    public static final String TABLE_NOTE = "note";
-    public static final String TABLE_CATEGORY = "category";
-    public static final String TABLE_ATTACHMENT = "attachment";
-    public static final String TABLE_CHECKITEM = "checkitem";
+    public static final String TABLE_NOTE = Note.TABLE_NAME;
+    public static final String TABLE_CATEGORY = Category.TABLE_NAME;
+    public static final String TABLE_ATTACHMENT = Attachment.TABLE_NAME;
+    public static final String TABLE_CHECKITEM = CheckItem.TABLE_NAME;
 
     //Uris
-    public static final Uri CONTENT_URI_NOTE = Uri.parse("content://" + AUTHORITY + "/" + TABLE_NOTE);
-    public static final Uri CONTENT_URI_CATEGORY = Uri.parse("content://" + AUTHORITY + "/" + TABLE_CATEGORY);
-    public static final Uri CONTENT_URI_CHECKITEM= Uri.parse("content://" + AUTHORITY + "/" + TABLE_CHECKITEM);
-    public static final Uri CONTENT_URI_ATTACHMENT = Uri.parse("content://" + AUTHORITY + "/" + TABLE_ATTACHMENT);
+    public static final Uri CONTENT_URI_NOTE = Uri.parse("content:/" + AUTHORITY + "/" + TABLE_NOTE);
+    public static final Uri CONTENT_URI_CATEGORY = Uri.parse("content:/" + AUTHORITY + "/" + TABLE_CATEGORY);
+    public static final Uri CONTENT_URI_CHECKITEM= Uri.parse("content:/" + AUTHORITY + "/" + TABLE_CHECKITEM);
+    public static final Uri CONTENT_URI_ATTACHMENT = Uri.parse("content:/" + AUTHORITY + "/" + TABLE_ATTACHMENT);
 
     //IDs
     public static final int NOTE = 1;
@@ -40,6 +42,9 @@ public class MyContentProvider extends ContentProvider {
     public static final int ATTACHMENT_ID = 8;
 
     private DbHelper dbHelper;
+    private SQLiteDatabase db;
+
+    String TAG = "MyContentProvider";
 
 
 
@@ -49,7 +54,7 @@ public class MyContentProvider extends ContentProvider {
         uriMatcher.addURI(AUTHORITY, TABLE_NOTE, NOTE);
         uriMatcher.addURI(AUTHORITY, TABLE_NOTE + "/#", NOTE_ID);
 
-        uriMatcher.addURI(AUTHORITY, TABLE_ATTACHMENT, ATTACHMENT);
+        uriMatcher.addURI(AUTHORITY, TABLE_ATTACHMENT , ATTACHMENT);
         uriMatcher.addURI(AUTHORITY, TABLE_ATTACHMENT + "/#", ATTACHMENT_ID);
 
         uriMatcher.addURI(AUTHORITY, TABLE_CATEGORY, CATEGORY);
@@ -64,8 +69,19 @@ public class MyContentProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
+        boolean ret = true;
         dbHelper = new DbHelper(getContext());
-        return true;
+        db = dbHelper.getWritableDatabase();
+
+        if (db == null)
+        ret = false;
+
+        if (db.isReadOnly()) {
+            db.close();
+            db = null;
+            ret = false;
+        }
+        return ret;
     }
 
     @Nullable
@@ -76,22 +92,22 @@ public class MyContentProvider extends ContentProvider {
         switch (uriType) {
             case NOTE_ID:
                 queryBuilder.setTables(Note.TABLE_NAME);
-                queryBuilder.appendWhere(Note.COLUMN_ID + "=" + uri.getLastPathSegment());
+                queryBuilder.appendWhere(Note.COLUMN_ID + " = " + uri.getLastPathSegment());
                 break;
 
             case CHECKITEM_ID:
                 queryBuilder.setTables(CheckItem.TABLE_NAME);
-                queryBuilder.appendWhere(CheckItem.COLUMN_ID + "=" + uri.getLastPathSegment());
+                queryBuilder.appendWhere(CheckItem.COLUMN_ID + " = " + uri.getLastPathSegment());
                 break;
 
             case CATEGORY_ID:
                 queryBuilder.setTables(Category.TABLE_NAME);
-                queryBuilder.appendWhere(Category.COLUMN_ID + "=" + uri.getLastPathSegment());
+                queryBuilder.appendWhere(Category.COLUMN_ID + " = " + uri.getLastPathSegment());
                 break;
 
             case ATTACHMENT_ID:
                 queryBuilder.setTables(Attachment.TABLE_NAME);
-                queryBuilder.appendWhere(Attachment.COLUMN_ID + "=" + uri.getLastPathSegment());
+                queryBuilder.appendWhere(Attachment.COLUMN_ID + " = " + uri.getLastPathSegment());
                 break;
 
             case ATTACHMENT:
@@ -99,13 +115,16 @@ public class MyContentProvider extends ContentProvider {
             case CATEGORY:
             case CHECKITEM:
                 break;
+
             default:
                 throw new IllegalArgumentException("Unknown Uri:");
         }
 
-        Cursor cursor = queryBuilder.query(dbHelper.getReadableDatabase(), projection, selection, selectionArgs, null, null, sortOrder);
-        cursor.setNotificationUri(getContext().getContentResolver(), uri);
-        return cursor;
+             Cursor cursor = queryBuilder.query(dbHelper.getReadableDatabase(), projection, selection, selectionArgs, null, null, sortOrder);
+        //Log.d(TAG, "Cursor: " + cursor);
+
+            cursor.setNotificationUri(getContext().getContentResolver(), uri);
+        return null;
     }
 
     @Nullable
