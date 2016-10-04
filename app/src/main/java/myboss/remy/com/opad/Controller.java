@@ -1,6 +1,7 @@
 package myboss.remy.com.opad;
 
 import android.app.Application;
+import android.content.ContentResolver;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
@@ -8,6 +9,7 @@ import android.preference.PreferenceManager;
 import android.text.TextUtils;
 
 import myboss.remy.com.opad.com.example.database.DbHelper;
+import myboss.remy.com.opad.com.example.database.MyContentProvider;
 
 /**
  * Created by Chimere on 9/18/2016.
@@ -25,8 +27,9 @@ public class Controller extends Application {
     public static final String TIME_OPTION = "timeOption";
 
     public static long  PUBLIC_CATEGORYID = 1;
-    public static long  LASTCREATED_CATEGORYID ;
+    public static Uri  LASTCREATED_CATEGORYID  = MyContentProvider.CONTENT_URI_CATEGORY;
     public static long  LASTSELECTED_CATEGORYID ;
+
 
     @Override
     public void onCreate() {
