@@ -13,15 +13,17 @@ import myboss.remy.com.opad.Controller;
  * Created by Chimere on 9/18/2016.
  */
 public class DbHelper extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 1;
-    private static final String DATABASE_NAME = "opad.db";
+    private static final int DATABASE_VERSION = 2;
+    private static final String DATABASE_NAME = "thinkpad.db";
 
     private ContentResolver contentResolver;
+    private Context context;
 
 
     public DbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         contentResolver = context.getContentResolver();
+        this.context = context;
     }
 
     @Override
@@ -46,7 +48,7 @@ public class DbHelper extends SQLiteOpenHelper {
     private void loadData(ContentValues db) {
         ContentValues contentValues = new ContentValues();
         //General
-       /* Category category = new Category();
+        Category category = new Category(context);
         category.setName("General");
         String value = category.getName();
         contentValues.put(value, "General");
@@ -54,7 +56,7 @@ public class DbHelper extends SQLiteOpenHelper {
         //Controller.PUBLIC_CATEGORYID = categoryId;
 
         Note note = new Note();
-        note.setCategoryId(categoryId);
+       // note.setCategoryId(categoryId);
         note.setTitle("Tasks");
         note.setType(Note.GENERAL);
         note.setContent("Go Chop");
@@ -67,17 +69,17 @@ public class DbHelper extends SQLiteOpenHelper {
         categoryId = category.save(db);
 
         note.reset();
-        note.setCategoryId(categoryId);
+        //note.setCategoryId(categoryId);
         note.setTitle("To do");
         note.setType(Note.CHECKLIST);
         Uri noteId = note.save(db);
 
         CheckItem checkItem = new CheckItem();
-        checkItem.setNoteId(noteId);
+        //checkItem.setNoteId(noteId);
         checkItem.setName("Remy Id getting better");
         checkItem.save(db);
 
-    }*/
     }
-}
+    }
+
 

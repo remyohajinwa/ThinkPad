@@ -9,10 +9,10 @@ import android.net.Uri;
  * Created by Chimere on 9/19/2016.
  */
 public class Attachment extends GeneralModel{
-    public static final String TABLE_NAME = "attachment";
+    public static final String TABLE_NAME = "attachments";
 
     public static final String COLUMN_ID = GeneralModel.COLUMN_ID;
-    public static final String COLUMN_NOTEID = GeneralModel.COLUMN_ID;
+    public static final String COLUMN_NOTEID = "note_id";
     public static final String COLUMN_NAME = "name";
     public static final String COLUMN_URI = "uri";
     private static ContentResolver contentResolver;
@@ -29,12 +29,13 @@ public class Attachment extends GeneralModel{
     }
 
     public static String getSQL() {
-        return String.format("CREATE TABLE ", TABLE_NAME, " (",
-                COLUMN_ID, " INTEGER PRIMARY KEY AUTOINCREMENT, ",
-                COLUMN_NOTEID, " INTEGER, ",
-                COLUMN_NAME, " TEXT, ",
-                COLUMN_URI, " TEXT, ",
-                 ");");
+         String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS "+TABLE_NAME+ " ("+
+                COLUMN_ID +" INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COLUMN_NOTEID + " INTEGER, "+
+                COLUMN_NAME + " TEXT, "+
+                COLUMN_URI + " TEXT "+
+                 ")";
+        return CREATE_TABLE;
     }
 
     public Uri save(ContentValues contentValues) {

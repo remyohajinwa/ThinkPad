@@ -10,7 +10,7 @@ import android.net.Uri;
  * Created by Chimere on 9/19/2016.
  */
 public class CheckItem extends GeneralModel {
-    public static final String TABLE_NAME  = "checklist";
+    public static final String TABLE_NAME  = "checkitems";
 
     public static final String COLUMN_ID  = GeneralModel.COLUMN_ID;
     public static final String COLUMN_NOTEID  = "note_id";
@@ -31,12 +31,14 @@ public class CheckItem extends GeneralModel {
 
 
     public static String getSQL() {
-        return String.format("CREATE TABLE ", TABLE_NAME, " (",
-                COLUMN_ID, " INTEGER PRIMARY KEY AUTOINCREMENT, ",
-                COLUMN_NOTEID, " INTEGER, ",
-                COLUMN_NAME, " TEXT, ",
-                COLUMN_STATUS, " TEXT, ",
-                COLUMN_STATUS, " INTEGER", ");");
+         String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME +" (" +
+                COLUMN_ID +" INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COLUMN_NOTEID +" INTEGER, " +
+                COLUMN_NAME + " TEXT, " +
+
+                COLUMN_STATUS + " INTEGER" + ")";
+
+        return CREATE_TABLE;
     }
 
     public Uri save(ContentValues contentValues) {

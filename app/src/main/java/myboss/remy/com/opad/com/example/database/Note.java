@@ -14,7 +14,7 @@ import myboss.remy.com.opad.Controller;
  * Created by Chimere on 9/19/2016.
  */
 public class Note extends GeneralModel {
-    public static final String TABLE_NAME = "note";
+    public static final String TABLE_NAME = "notes";
 
     public static final String COLUMN_ID = GeneralModel.COLUMN_ID;
     public static final String COLUMN_CREATEDTIME = GeneralModel.COLUMN_CREATEDTIME;
@@ -48,12 +48,14 @@ public class Note extends GeneralModel {
     }
 
     public static String getSQL() {
-        return String.format("CREATE TABLE ", TABLE_NAME, " (",
-                GeneralModel.getSQL(),
-                COLUMN_CATEGORYID, " INTEGER, ",
-                COLUMN_TITLE, " TEXT, ",
-                COLUMN_TYPE, " TEXT",
-                ");");
+         String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME +" ( " +
+                GeneralModel.getSQL() +
+                COLUMN_CATEGORYID +" INTEGER,"+
+                COLUMN_TITLE +" TEXT, "+
+                COLUMN_TYPE  +" TEXT" +
+                ")";
+
+        return CREATE_TABLE;
     }
 
     public Uri save(ContentValues contentValues) {
