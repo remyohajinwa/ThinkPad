@@ -22,10 +22,12 @@ public abstract class GeneralModel  {
     protected Boolean isLocked;
 
     public static String getSQL() {
-        return String.format(COLUMN_ID, "INTEGER PRIMARY KEY AUTOINCREMENT, ",
-                COLUMN_CREATEDTIME, "INTEGER, ",
-                COLUMN_MODIFIEDTIME, "INTEGER, ",
-                COLUMN_LOCKED, "INTEGER");
+         String CREATE_TABLE = " _id " + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                COLUMN_CREATEDTIME + " INTEGER, " +
+                COLUMN_MODIFIEDTIME + " INTEGER, " +
+                COLUMN_LOCKED + " INTEGER ";
+
+        return CREATE_TABLE;
     }
 
     public Uri save(ContentValues contentValues) {
@@ -75,11 +77,13 @@ public abstract class GeneralModel  {
    }
    // abstract long save(SQLiteDatabase db);
 
-    /*public long persist(SQLiteDatabase db) {
+    public Uri persist(Uri uri, ContentValues contentValues) {
         if (id > 0)
-            return update(db) ? id : 0;
-        else
-            return save(db);
-    }*/
+            update(contentValues);
+
+        save(contentValues);//cant save...Dont know Why?
+
+        return uri;
+    }
 
 }
