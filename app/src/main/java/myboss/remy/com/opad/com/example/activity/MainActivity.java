@@ -3,6 +3,7 @@ package myboss.remy.com.opad.com.example.activity;
 import android.app.AlertDialog;
 import android.app.DialogFragment;
 import android.app.ExpandableListActivity;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -42,6 +43,7 @@ public class MainActivity extends AppCompatActivity
     private ViewPager viewPager;
     private AlertDialog newButtonDialog;
     private AlertDialog sortButtonDialog;
+
     ExpandableListActivity listActivity = new ExpandableListActivity();
 
     private DialogInterface.OnClickListener dialogListener = new DialogInterface.OnClickListener() {
@@ -108,6 +110,7 @@ public class MainActivity extends AppCompatActivity
                 AddFolderDialogFragment folderDialogFragment = new AddFolderDialogFragment();
                 folderDialogFragment.show(getFragmentManager(), "New Folder");
 
+
         }
     }
     private void setUpViewPager(ViewPager viewPager) {
@@ -125,7 +128,6 @@ public class MainActivity extends AppCompatActivity
         public ViewPagerAdapter(FragmentManager fm) {
             super(fm);
         }
-
         @Override
         public CharSequence getPageTitle(int position) {
             return fragmentTitle.get(position);
